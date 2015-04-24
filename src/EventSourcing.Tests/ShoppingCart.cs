@@ -5,32 +5,26 @@ namespace EventSourcing.Tests
 {
     public class ShoppingCart: IAggregate
     {
-        private readonly List<IDomainEvent> _uncommittedEvents = new List<IDomainEvent>();
-        private readonly Guid _id;
+        private readonly List<IAggregateEvent> _uncommittedEvents = new List<IAggregateEvent>();
+
+        public ShoppingCart()
+        {
+        }
 
         public ShoppingCart(Guid customerId)
         {
             if(customerId == Guid.Empty) throw new ArgumentException("Customer ID must be a valid GUID");
-           _id =  Guid.NewGuid();
-            RaiseEvent(new ShoppingCartCreated(_id, customerId));
-        }
-
-        private void RaiseEvent(IDomainEvent e)
-        {
-            _uncommittedEvents.Add(e);
+            ApplyEvent(new ShoppingCartCreated(Guid.NewGuid(), customerId));
         }
 
         public void AddItem(Guid itemId, int quantity)
         {
-            RaiseEvent(new ItemAddedToCart(itemId, quantity));
+            ApplyEvent(new ItemAddedToCart(Id, itemId, quantity));
         }
 
-        public Guid Id
-        {
-            get { return _id; }
-        }
+        public Guid Id { get; private set; }
 
-        public IEnumerable<IDomainEvent> GetUncommittedEvents()
+        public IEnumerable<IAggregateEvent> GetUncommittedEvents()
         {
             return _uncommittedEvents;
         }
@@ -38,6 +32,24 @@ namespace EventSourcing.Tests
         public void ClearUncommittedEvents()
         {
             _uncommittedEvents.Clear();
+        }
+
+        public void LoadHistory(IEnumerable<IAggregateEvent> events)
+        {
+
+            foreach (var e in events) ApplyEvent(e, false);
+        }
+
+        private void ApplyEvent(IAggregateEvent e, bool uncommitted = true)
+        {
+            this.AsDynamic().Apply(e);
+            if(uncommitted) _uncommittedEvents.Add(e);
+
+        }
+
+        void Apply(ShoppingCartCreated e)
+        {
+            Id = e.AggregateId;
         }
     }
 }

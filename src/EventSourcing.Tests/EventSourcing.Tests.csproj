@@ -40,6 +40,9 @@
     <Reference Include="Fixie">
       <HintPath>..\packages\Fixie.1.0.0.15\lib\net45\Fixie.dll</HintPath>
     </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects">
+      <HintPath>..\packages\CompareNETObjects.3.02.0.0\lib\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -60,13 +63,16 @@
   <ItemGroup>
     <Compile Include="AggregateRepository.cs" />
     <Compile Include="CartTests.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EventBasedTests.cs" />
     <Compile Include="EventStoreBus.cs" />
     <Compile Include="HeaderKeys.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="IEventBus.cs" />
     <Compile Include="InMemoryBus.cs" />
-    <Compile Include="ItemAddedToCart.cs" />
+    <Compile Include="CartEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReflectionUtils.cs" />
     <Compile Include="ShoppingCart.cs" />
   </ItemGroup>
   <ItemGroup>

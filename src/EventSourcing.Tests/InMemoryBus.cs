@@ -18,11 +18,20 @@ namespace EventSourcing.Tests
             return Task.FromResult(0);
 
         }
-        
+
+        public IEnumerable<object> GetEventsFromStream(string streamName)
+        {
+            return _events.ContainsKey(streamName) ? _events[streamName].Select(p => p.Event) : new List<object>();
+        }
+
         public IEnumerable<object> GetAllPublishedEvents()
         {
             return _events.Values.SelectMany(x => x).Select(p => p.Event);
-        } 
+        }
 
+        public void Publish(string streamName, IAggregateEvent[] events)
+        {
+            PublishAsync(streamName, null, events);
+        }
     }
 }

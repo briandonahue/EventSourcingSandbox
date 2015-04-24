@@ -25,6 +25,34 @@ namespace EventSourcing.Tests
             return connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, ToEventData(events, headers));
         }
 
+        public IEnumerable<object> GetEventsFromStream(string streamName)
+        {
+            var eventSlice =
+                connection.ReadStreamEventsForwardAsync(streamName, StreamPosition.Start, StreamPosition.End, false)
+                    .Result;
+            return eventSlice.Events.Select(GetTypedEvent);
+        }
+
+        private object GetTypedEvent(ResolvedEvent e)
+        {
+            var originalEvent = e.Event;
+            var headerJson = Encoding.UTF8.GetString(originalEvent.Metadata);
+            var headers = JsonConvert.DeserializeObject<IDictionary<string, object>>(headerJson);
+
+            if (!headers.ContainsKey(HeaderKeys.EventClrTypeName))
+            {
+                throw new Exception(string.Format("Event {0} in stream {1} missing header: {2}", e.Event.EventId,
+                    e.Event.EventStreamId, HeaderKeys.EventClrTypeName));
+            }
+            var eventTypeName = headers[HeaderKeys.EventClrTypeName].ToString();
+            //  how to match type here?
+            var eventType = Type.GetType(eventTypeName);
+
+            var jsonStr = Encoding.UTF8.GetString(originalEvent.Data);
+            var typedEvent = JsonConvert.DeserializeObject(jsonStr, eventType);
+            return typedEvent;
+        }
+
         private EventData[] ToEventData(IEnumerable<object> events, IDictionary<string, object> headers)
         {
             return events.Select(e =>
@@ -47,13 +75,13 @@ namespace EventSourcing.Tests
 
     public class PublishedEvent
     {
-        public IDictionary<string, object> Headers { get; private set; }
-        public object Event { get; set; }
-
         public PublishedEvent(IDictionary<string, object> headers, object e)
         {
             Headers = headers;
             Event = e;
         }
+
+        public IDictionary<string, object> Headers { get; private set; }
+        public object Event { get; set; }
     }
 }

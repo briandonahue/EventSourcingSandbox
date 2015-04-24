@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace EventSourcing.Tests
@@ -39,6 +40,14 @@ namespace EventSourcing.Tests
                 updateHeaders(headers);
 
             return headers;
+        }
+
+        public T Get<T>(Guid aggregateId) where T:IAggregate
+        {
+            var aggregate = Activator.CreateInstance<T>();
+            var events = _bus.GetEventsFromStream(typeof (T).FullName + "-" + aggregateId).Cast<IAggregateEvent>();
+            aggregate.LoadHistory(events);
+            return aggregate;
         }
     }
 }

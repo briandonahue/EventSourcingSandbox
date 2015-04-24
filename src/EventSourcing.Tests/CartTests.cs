@@ -12,6 +12,8 @@ namespace EventSourcing.Tests
         private readonly Guid _customerId = Guid.NewGuid();
         private AggregateRepository _repo;
         private InMemoryBus _bus;
+        private IEnumerable<object> _publishedEvents;
+        private ShoppingCart _cart;
 
         public CartTests()
         {
@@ -27,17 +29,25 @@ namespace EventSourcing.Tests
 
             _bus = new InMemoryBus();
             _repo = new AggregateRepository(_bus);
+            _cart = new ShoppingCart(_customerId);
+            _cart.AddItem(Guid.NewGuid(), 1);
+            _repo.Save(_cart);
+            _publishedEvents = _bus.GetAllPublishedEvents();
         }
 
-        public void ShouldDoStuff()
+        public void FirstEventShouldBeShoppingCartCreated()
         {
-            var cart = new ShoppingCart(_customerId);
-            cart.AddItem(Guid.NewGuid(), 1);
-            _repo.Save(cart);
-            var publishedEvents = _bus.GetAllPublishedEvents();
-            var first = publishedEvents.ElementAt(0);
+            var first = _publishedEvents.ElementAt(0);
             first.ShouldBeType<ShoppingCartCreated>();
+            var cartCreated = (ShoppingCartCreated) first;
+            cartCreated.AggregateId.ShouldEqual(_cart.Id);
+            cartCreated.CustomerId.ShouldEqual(_customerId);
+        }
 
+        public void CartCreatedIdShouldEqualCartId()
+        {
+            
+            var first = _publishedEvents.ElementAt(0);
         }
 
     }
