@@ -221,7 +221,7 @@ namespace EventSourcing.Tests
         {
             try
             {
-                // Try to incoke the method
+                // Try to invoke the method
                 return type.InvokeMember(
                     name,
                     BindingFlags.InvokeMethod | bindingFlags,
@@ -242,6 +242,23 @@ namespace EventSourcing.Tests
         }
     }
 
+    public static class TypeReflectionExtenstions
+    {
+        public static MethodInfo[] GetMethodsWithInheritance(this Type type, string methodName, BindingFlags bindingFlags)
+        {
+            if (type != null && type != typeof (object))
+            {
+                var methods =
+                    type.GetMethods(bindingFlags).Where(m => m.Name == methodName).ToArray();
+                if (methods.Any())
+                {
+                    return methods.ToArray();
+                }
+                return type.BaseType.GetMethodsWithInheritance(methodName, bindingFlags);
+            }
+            return new MethodInfo[]{};
+        }
+    }
 
     public static class PrivateReflectionDynamicObjectExtensions
     {

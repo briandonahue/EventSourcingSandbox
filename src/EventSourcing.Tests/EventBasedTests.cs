@@ -20,18 +20,15 @@ namespace EventSourcing.Tests
 
         public void Test()
         {
-            
-
             Given(new ShoppingCartCreated(AggregateId, _customerId));
             When(x => x.AddItem(_itemId, 1));
             Expect(new ItemAddedToCart(AggregateId, _itemId, 1));
-            Run();
         }
     }
 
     public class EventBasedTests<T> where T : IAggregate
     {
-        private Action<T> _command;
+        private Action<object> _command;
         private IAggregateEvent[] _given;
         private CompareLogic _eventCompareLogic;
         private IAggregateEvent[] _expected;
@@ -46,7 +43,7 @@ namespace EventSourcing.Tests
 
         public void When(Action<T> action)
         {
-            _command = action;
+            _command = (sut) => action((T) sut);
         }
 
         public void Given(params IAggregateEvent[] events)
@@ -59,7 +56,7 @@ namespace EventSourcing.Tests
             _expected = events;
         }
 
-        protected void Run()
+        private void Run()
         {
             var aggregate = Activator.CreateInstance<T>();
             aggregate.LoadHistory(_given);
@@ -67,8 +64,6 @@ namespace EventSourcing.Tests
             var uncommittedEvents = aggregate.GetUncommittedEvents().ToArray();
             var comparisonResult = _eventCompareLogic.Compare(_expected, uncommittedEvents);
             if(!comparisonResult.AreEqual) throw new Exception(comparisonResult.DifferencesString);
-
-
         }
     }
 }

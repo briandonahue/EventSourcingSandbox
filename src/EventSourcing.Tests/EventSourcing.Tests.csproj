@@ -65,6 +65,7 @@
     <Compile Include="CartTests.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventBasedTests.cs" />
+    <Compile Include="EventSpecsConvention.cs" />
     <Compile Include="EventStoreBus.cs" />
     <Compile Include="HeaderKeys.cs" />
     <Compile Include="IAggregate.cs" />
