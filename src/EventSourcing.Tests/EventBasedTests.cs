@@ -5,27 +5,6 @@ using KellermanSoftware.CompareNetObjects;
 
 namespace EventSourcing.Tests
 {
-    public class CartEventTests : EventBasedTests<ShoppingCart>
-    {
-        private ShoppingCart _cart;
-        private readonly Guid _customerId;
-        private readonly Guid _itemId;
-
-        public CartEventTests()
-        {
-            _customerId = Guid.NewGuid();
-            _itemId = Guid.NewGuid();
-
-        }
-
-        public void Test()
-        {
-            Given(new ShoppingCartCreated(AggregateId, _customerId));
-            When(x => x.AddItem(_itemId, 1));
-            Expect(new ItemAddedToCart(AggregateId, _itemId, 1));
-        }
-    }
-
     public class EventBasedTests<T> where T : IAggregate
     {
         private Action<object> _command;
@@ -41,20 +20,26 @@ namespace EventSourcing.Tests
 
         public Guid AggregateId { get; private set; }
 
-        public void When(Action<T> action)
+        protected void When(Action<T> action)
         {
             _command = (sut) => action((T) sut);
         }
 
-        public void Given(params IAggregateEvent[] events)
+        protected void Given(params IAggregateEvent[] events)
         {
             _given = events;
         }
 
-        public void Expect(params IAggregateEvent[] events)
+        protected void Expect(params IAggregateEvent[] events)
         {
             _expected = events;
         }
+
+        protected void ExpectNoEvents()
+        {
+            _expected = new IAggregateEvent[0];
+        }
+
 
         private void Run()
         {

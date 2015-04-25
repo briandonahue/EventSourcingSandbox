@@ -11,6 +11,7 @@ namespace EventSourcing.Tests
         public EventSpecsConvention()
         {
             Classes.NameEndsWith("Tests");
+            Methods.Where(m => m.IsPublic && m.IsVoid());
             ClassExecution.CreateInstancePerCase();
             CaseExecution.Wrap<RunAfterEachCase>();
         }

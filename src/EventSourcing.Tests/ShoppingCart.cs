@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace EventSourcing.Tests
 {
-    public class ShoppingCart: IAggregate
+    public class ShoppingCart : AggregateBase
     {
-        private readonly List<IAggregateEvent> _uncommittedEvents = new List<IAggregateEvent>();
+        private readonly IDictionary<Guid, int> _items = new Dictionary<Guid, int>();
 
         public ShoppingCart()
         {
@@ -13,7 +13,7 @@ namespace EventSourcing.Tests
 
         public ShoppingCart(Guid customerId)
         {
-            if(customerId == Guid.Empty) throw new ArgumentException("Customer ID must be a valid GUID");
+            if (customerId == Guid.Empty) throw new ArgumentException("Customer ID must be a valid GUID");
             ApplyEvent(new ShoppingCartCreated(Guid.NewGuid(), customerId));
         }
 
@@ -22,34 +22,27 @@ namespace EventSourcing.Tests
             ApplyEvent(new ItemAddedToCart(Id, itemId, quantity));
         }
 
-        public Guid Id { get; private set; }
-
-        public IEnumerable<IAggregateEvent> GetUncommittedEvents()
+        public void RemoveItem(Guid itemId)
         {
-            return _uncommittedEvents;
+            if (_items.ContainsKey(itemId))
+            {
+                ApplyEvent(new ItemRemovedFromCart(Id, itemId));
+            }
         }
 
-        public void ClearUncommittedEvents()
-        {
-            _uncommittedEvents.Clear();
-        }
-
-        public void LoadHistory(IEnumerable<IAggregateEvent> events)
-        {
-
-            foreach (var e in events) ApplyEvent(e, false);
-        }
-
-        private void ApplyEvent(IAggregateEvent e, bool uncommitted = true)
-        {
-            this.AsDynamic().Apply(e);
-            if(uncommitted) _uncommittedEvents.Add(e);
-
-        }
-
-        void Apply(ShoppingCartCreated e)
+        private void Apply(ShoppingCartCreated e)
         {
             Id = e.AggregateId;
+        }
+
+        private void Apply(ItemAddedToCart e)
+        {
+            _items.Add(e.ItemId, e.Quantity);
+        }
+
+        private void Apply(ItemRemovedFromCart e)
+        {
+            _items.Remove(e.ItemId);
         }
     }
 }

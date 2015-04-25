@@ -34,4 +34,16 @@ namespace EventSourcing.Tests
         public Guid ItemId { get; private set; }
         public int Quantity { get; private set; }
     }
+
+    public class ItemRemovedFromCart : IAggregateEvent
+    {
+        public ItemRemovedFromCart(Guid cartId, Guid itemId)
+        {
+            AggregateId = cartId;
+            ItemId = itemId;
+        }
+
+        public Guid AggregateId { get; set; }
+        public Guid ItemId { get; private set; }
+    }
 }
