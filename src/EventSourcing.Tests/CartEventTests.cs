@@ -1,4 +1,5 @@
 using System;
+using Should;
 
 namespace EventSourcing.Tests
 {
@@ -32,6 +33,17 @@ namespace EventSourcing.Tests
             Expect(new ItemRemovedFromCart(AggregateId, _itemId));
         }
 
+        public void WhenRemovingItemFromCartThatHasAlreadyBeenRemoved()
+        {
+            Given(
+                new ShoppingCartCreated(AggregateId, _customerId),
+                new ItemAddedToCart(AggregateId, _itemId, 1),
+                new ItemRemovedFromCart(AggregateId, _itemId)
+            );
+            When(x => x.RemoveItem(_itemId));
+            ExpectNoEvents();
+        }
+
         public void WhenRemovingItemFromCartThatHasNotBeenAdded()
         {
             Given(
@@ -40,5 +52,29 @@ namespace EventSourcing.Tests
             When(x => x.RemoveItem(_itemId));
             ExpectNoEvents();
         }
+
+        public void WhenChangingQuantityOfItemInCart()
+        {
+            var originalQty = 1;
+            var newQty = 5;
+            Given(
+                new ShoppingCartCreated(AggregateId, _customerId),
+                new ItemAddedToCart(AggregateId, _itemId, originalQty)
+            );
+            When(x => x.ChangeQuantity(_itemId, newQty));
+            Expect(new QuantityChangedForItem(AggregateId, _itemId, originalQty, newQty));
+        }
+
+        public void WhenAttemptingToChangeQuantityOfItemNotInCart()
+        {
+            var newQty = 5;
+            Given(
+                new ShoppingCartCreated(AggregateId, _customerId)
+            );
+            When(x => x.ChangeQuantity(_itemId, newQty));
+            ExpectException<ItemNotFoundInCartException>(e => e.ItemId.ShouldEqual(_itemId, "ItemId"));
+        }
+
     }
+
 }

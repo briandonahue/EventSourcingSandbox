@@ -44,5 +44,21 @@ namespace EventSourcing.Tests
         {
             _items.Remove(e.ItemId);
         }
+
+        public void ChangeQuantity(Guid itemId, int newQty)
+        {
+            if (!_items.ContainsKey(itemId)) throw new ItemNotFoundInCartException(itemId);
+            ApplyEvent(new QuantityChangedForItem(Id, itemId, _items[itemId], newQty));
+        }
+    }
+
+    public class ItemNotFoundInCartException : Exception
+    {
+        public ItemNotFoundInCartException(Guid itemId)
+        {
+            ItemId = itemId;
+        }
+
+        public Guid ItemId { get; private set; }
     }
 }

@@ -46,4 +46,21 @@ namespace EventSourcing.Tests
         public Guid AggregateId { get; set; }
         public Guid ItemId { get; private set; }
     }
+
+    public class QuantityChangedForItem : IAggregateEvent
+    {
+        public QuantityChangedForItem(Guid cartId, Guid itemId, int oldQty, int newQty)
+        {
+            AggregateId = cartId;
+            ItemId = itemId;
+            OldQuantity = oldQty;
+            NewQuantity = newQty;
+        }
+
+        public Guid AggregateId { get; set; }
+        public Guid ItemId { get; private set; }
+        public int OldQuantity { get; private set; }
+        public int NewQuantity { get; private set; }
+    }
+
 }
