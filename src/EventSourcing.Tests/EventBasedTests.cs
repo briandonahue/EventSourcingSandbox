@@ -52,7 +52,7 @@ namespace EventSourcing.Tests
             }
             catch (Exception ex)
             {
-                if (_expectedExceptionType == null) throw;
+                if (_expectedExceptionType == null || _expectedExceptionType != ex.GetType()) throw;
                 _exceptionValidator(ex);
                 return;
             }

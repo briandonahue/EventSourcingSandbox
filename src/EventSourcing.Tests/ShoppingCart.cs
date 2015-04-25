@@ -24,10 +24,8 @@ namespace EventSourcing.Tests
 
         public void RemoveItem(Guid itemId)
         {
-            if (_items.ContainsKey(itemId))
-            {
-                ApplyEvent(new ItemRemovedFromCart(Id, itemId));
-            }
+            if (!_items.ContainsKey(itemId)) throw new ItemNotFoundInCartException(itemId);
+            ApplyEvent(new ItemRemovedFromCart(Id, itemId));
         }
 
         private void Apply(ShoppingCartCreated e)
@@ -44,6 +42,12 @@ namespace EventSourcing.Tests
         {
             _items.Remove(e.ItemId);
         }
+
+        private void Apply(QuantityChangedForItem e)
+        {
+            _items[e.ItemId] = e.NewQuantity;
+        }
+
 
         public void ChangeQuantity(Guid itemId, int newQty)
         {
