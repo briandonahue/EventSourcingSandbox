@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.Utils
 {
     public static class EnumerableExtensions
     {

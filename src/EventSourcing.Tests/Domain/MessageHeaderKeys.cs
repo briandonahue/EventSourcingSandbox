@@ -1,4 +1,4 @@
-﻿namespace EventSourcing.Tests
+﻿namespace EventSourcing.Tests.Domain
 {
     public class HeaderKeys
     {

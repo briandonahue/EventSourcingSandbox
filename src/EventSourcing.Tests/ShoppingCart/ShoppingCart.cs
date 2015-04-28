@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventSourcing.Tests.Domain;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.ShoppingCart
 {
     public class ShoppingCart : AggregateBase
     {

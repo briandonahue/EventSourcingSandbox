@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using EventSourcing.Tests.Domain;
+using EventSourcing.Tests.ShoppingCart;
 using KellermanSoftware.CompareNetObjects;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.TestHelpers
 {
     public class EventBasedTests<T> where T : IAggregate
     {

@@ -74,22 +74,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateBase.cs" />
-    <Compile Include="AggregateRepository.cs" />
-    <Compile Include="CartEventTests.cs" />
-    <Compile Include="CartTests.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="EventBasedTests.cs" />
-    <Compile Include="EventSpecsConvention.cs" />
-    <Compile Include="EventStoreBus.cs" />
-    <Compile Include="HeaderKeys.cs" />
-    <Compile Include="IAggregate.cs" />
-    <Compile Include="IEventBus.cs" />
-    <Compile Include="InMemoryBus.cs" />
-    <Compile Include="CartEvents.cs" />
+    <Compile Include="Domain\AggregateBase.cs" />
+    <Compile Include="Domain\AggregateRepository.cs" />
+    <Compile Include="ShoppingCart\CartEventTests.cs" />
+    <Compile Include="EventStore\ESCartTests.cs" />
+    <Compile Include="Utils\EnumerableExtensions.cs" />
+    <Compile Include="TestHelpers\EventBasedTests.cs" />
+    <Compile Include="TestHelpers\EventSpecsConvention.cs" />
+    <Compile Include="EventStore\EventStoreBus.cs" />
+    <Compile Include="Domain\MessageHeaderKeys.cs" />
+    <Compile Include="Domain\IAggregate.cs" />
+    <Compile Include="Domain\IEventBus.cs" />
+    <Compile Include="TestHelpers\InMemoryBus.cs" />
+    <Compile Include="ShoppingCart\CartEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionUtils.cs" />
-    <Compile Include="ShoppingCart.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="ShoppingCart\ShoppingCart.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

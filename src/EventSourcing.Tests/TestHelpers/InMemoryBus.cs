@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventSourcing.Tests.Domain;
+using EventSourcing.Tests.EventStore;
+using EventSourcing.Tests.ShoppingCart;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.TestHelpers
 {
     public class InMemoryBus: IEventBus
     {

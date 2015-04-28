@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using EventSourcing.Tests.ShoppingCart;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.Domain
 {
     public class AggregateRepository
     {

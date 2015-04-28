@@ -1,6 +1,6 @@
 using System;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.ShoppingCart
 {
     public interface IAggregateEvent
     {

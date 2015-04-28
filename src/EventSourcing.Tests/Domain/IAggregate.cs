@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventSourcing.Tests.ShoppingCart;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.Domain
 {
     public interface IAggregate
     {

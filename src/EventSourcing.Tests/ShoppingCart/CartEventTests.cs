@@ -1,20 +1,14 @@
 using System;
+using EventSourcing.Tests.TestHelpers;
 using Should;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.ShoppingCart
 {
     public class CartEventTests : EventBasedTests<ShoppingCart>
     {
         private ShoppingCart _cart;
-        private readonly Guid _customerId;
-        private readonly Guid _itemId;
-
-        public CartEventTests()
-        {
-            _customerId = Guid.NewGuid();
-            _itemId = Guid.NewGuid();
-
-        }
+        private readonly Guid _customerId= Guid.NewGuid();
+        private readonly Guid _itemId = Guid.NewGuid();
 
         public void WhenAddingAnItemToACart()
         {

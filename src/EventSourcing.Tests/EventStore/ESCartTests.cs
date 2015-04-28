@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EventSourcing.Tests.Domain;
+using EventSourcing.Tests.ShoppingCart;
+using EventSourcing.Tests.TestHelpers;
 using EventStore.ClientAPI.Embedded;
 using Should;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.EventStore
 {
     public class CartTests
     {
@@ -13,7 +16,7 @@ namespace EventSourcing.Tests
         private AggregateRepository _repo;
         private InMemoryBus _bus;
         private IEnumerable<object> _publishedEvents;
-        private ShoppingCart _cart;
+        private ShoppingCart.ShoppingCart _cart;
 
         public CartTests()
         {
@@ -29,7 +32,7 @@ namespace EventSourcing.Tests
 
             _bus = new InMemoryBus();
             _repo = new AggregateRepository(_bus);
-            _cart = new ShoppingCart(_customerId);
+            _cart = new ShoppingCart.ShoppingCart(_customerId);
             _cart.AddItem(Guid.NewGuid(), 1);
             _repo.Save(_cart);
             _publishedEvents = _bus.GetAllPublishedEvents();

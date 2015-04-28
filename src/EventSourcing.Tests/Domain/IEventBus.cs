@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EventSourcing.Tests
+namespace EventSourcing.Tests.Domain
 {
     public interface IEventBus
     {
